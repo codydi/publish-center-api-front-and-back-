@@ -4,26 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
-use Facebook\Facebook;
-use Facebook\Exceptions\FacebookResponseException;
-use Facebook\Exceptions\FacebookSDKException;
+use Twitter\Twitter;
+use Twitter\Exceptions\TwitterResponseException;
+use Twitter\Exceptions\TwitterSDKException;
 
 use Illuminate\Http\Request;
 
-class FacebookController extends Controller
+class TwitterController extends Controller
 {
     public function showFaceBook($accessToken)
     {
         try {
-            $fb = self::getFacebookClient();
+            $fb = self::getTwitterClient();
             $response = $fb->get('/me', $accessToken);
-        } catch(FacebookResponseException $e) {
+        } catch(TwitterResponseException $e) {
             // When Graph returns an error
             echo 'Graph returned an error: ' . $e->getMessage();
             exit;
-        } catch(FacebookSDKException $e) {
+        } catch(TwitterSDKException $e) {
             // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            echo 'Twitter SDK returned an error: ' . $e->getMessage();
             exit;
         }
 
@@ -35,15 +35,15 @@ class FacebookController extends Controller
     public function showTwitter($accessToken)
     {
         try {
-            $fb = self::getFacebookClient();
+            $fb = self::getTwitterClient();
             $response = $fb->get('/me', $accessToken);
-        } catch(FacebookResponseException $e) {
+        } catch(TwitterResponseException $e) {
             // When Graph returns an error
             echo 'Graph returned an error: ' . $e->getMessage();
             exit;
-        } catch(FacebookSDKException $e) {
+        } catch(TwitterSDKException $e) {
             // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            echo 'Twitter SDK returned an error: ' . $e->getMessage();
             exit;
         }
 
@@ -79,9 +79,9 @@ class FacebookController extends Controller
         return redirect('/');
     }
 
-    private function getFacebookClient()
+    private function getTwitterClient()
     {
-        return new Facebook([
+        return new Twitter([
             'app_id' => env('FB_APP_ID'),
             'app_secret' => env('FB_APP_SECRET'),
             'default_graph_version' => 'v7.0',
@@ -93,7 +93,7 @@ class FacebookController extends Controller
         return view('facebook-data')->with('data', json_decode(\Storage::disk('local')->get('facebook.json')));
     }
 
-    public function updateFacebookData(Request $request)
+    public function updateTwitterData(Request $request)
     {
         $data = [];
         $input = $request->all();

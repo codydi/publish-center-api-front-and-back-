@@ -3,6 +3,7 @@
 
 <p><a href="#" onClick="logInWithFacebook()" id="fb-login">Connect facebook</a></p>
 <p><button onClick="showFacebookDashboard()" id="fb-dashboard">Facebook</button></p>
+<p><button onClick="showTwitterDashboard()" id="fb-dashboard">Twitter</button></p>
 
 <form method="post">
     @csrf
@@ -15,17 +16,19 @@
     <div>
         <button>Post</button>
     </div>
-
+    @php
+    $id = 0;
+    @endphp
     @foreach($posts as $post)
         <p>
             <div>{{$post->text}}</div>
-            <div>{{$post->posted_at}}</div>
+            <div>{{$post->posted_at}} <a href="{{url('delete/') . '/' .$id}}">Delete</a></div>
         </p>
     @endforeach
 </form>
 
 <script>
-    if (localStorage.fb_expires_at && localStorage.fb_expires_at * 1000 > new Date().getTime()) {
+    if (localStorage.fb_expires_at && localStorage.fb_expires_at > new Date().getTime()) {
         document.getElementById('fb-login').style.visibility = "hidden";
     } else {
         document.getElementById('fb-dashboard').style.visibility = "hidden";
@@ -36,13 +39,17 @@
         window.location.href = "{{url('/facebook')}}" + "/" + localStorage.fb_access_token;
     }
 
+    function showTwitterDashboard() {
+        window.location.href = "{{url('/twitter')}}" + "/" + localStorage.fb_access_token;
+    }
+
     logInWithFacebook = function() {
         FB.login(function(response) {
             if (response.authResponse) {
                 alert('You are logged in & cookie set!');
 
                 localStorage.fb_access_token = response.authResponse.accessToken;
-                localStorage.fb_expires_at = response.authResponse.data_access_expiration_time;
+                localStorage.fb_expires_at = response.authResponse.expiresIn * 1000 + new Date().getTime();
                 document.getElementById('fb-dashboard').style.visibility = "visible";
                 document.getElementById('fb-login').style.visibility = "hidden";
                 // Now you can redirect the user or do an AJAX request to

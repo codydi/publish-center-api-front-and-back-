@@ -19,6 +19,8 @@ Route::get('/', function () {
 });
 
 Route::post('/', 'FacebookController@makepost');
+Route::get('/delete/{id}', 'FacebookController@deletePost');
 Route::get('/facebook/{accessToken}', 'FacebookController@showFaceBook');
 Route::get('/data/facebook', 'FacebookController@showManageDataPage');
 Route::post('/data/facebook', 'FacebookController@updateFacebookData');
+Route::get('/twitter/{accessToken}', 'FacebookController@showTwitter');
