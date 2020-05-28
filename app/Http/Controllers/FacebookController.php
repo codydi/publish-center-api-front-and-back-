@@ -28,8 +28,8 @@ class FacebookController extends Controller
         }
 
         $me = $response->getGraphUser();
-        return view('facebook')->with('username', $me->getName())
-            ->with('data', json_decode(\Storage::disk('local')->get('facebook.json')));
+        session(['user' => $me->getName()]);
+        return redirect('/');
     }
 
     public function showTwitter($accessToken)

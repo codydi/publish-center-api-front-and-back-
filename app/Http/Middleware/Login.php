@@ -15,11 +15,10 @@ class Login
    */
   public function handle($request, Closure $next)
   {
-    if(!session('access_token') || (time() >= session('expires_at')) || !session('permissions')){
-      $request->session()->flush();
-      return redirect('/login');
-    }
+        if(!session('user')){
+              return redirect('/login');
+        }
 
-    return $next($request);
+        return $next($request);
   }
 }
